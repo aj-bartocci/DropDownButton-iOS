@@ -47,7 +47,7 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
     var isChecklist = false
     weak var delegate: DropDownButtonSwiftDelegate?
     // Readonly to public
-    private(set) internal var datArray = NSArray()
+    private(set) internal var dataArray = NSArray()
     private(set) internal var dataArrayCount = NSInteger()
     private(set) internal var isOpen = false
     
@@ -231,30 +231,14 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
     
     // MARK: Border and Arrow Methods
     
-    func borderColor(color:UIColor) {
+    func borderColor(color:UIColor, ofWidth width:CGFloat) {
         borderColor = color;
         
         topBorder.strokeColor = color.CGColor;
         bottomBorder.strokeColor = color.CGColor;
         rightBorder.strokeColor = color.CGColor;
         leftBorder.strokeColor = color.CGColor;
-    }
-    
-    func arrowColor(color:UIColor) {
-        arrowColor = color;
         
-        arrowLeftHalf.strokeColor = color.CGColor;
-        arrowRightHalf.strokeColor = color.CGColor;
-    }
-    
-    func arrowWidth(width:CGFloat) {
-        if arrowWidth >= 0 {
-            arrowLeftHalf.lineWidth = width
-            arrowRightHalf.lineWidth = width
-        }
-    }
-    
-    func borderWidth(width:CGFloat) {
         if  width >= 0 {
             topBorder.lineWidth = width
             bottomBorder.lineWidth = width
@@ -265,6 +249,18 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
             rightBorder.frame.origin.x = topBorder.frame.size.width-0.5
             bottomBorder.frame.origin.y = rightBorder.frame.size.height-width/2
             topBorder.frame.origin.y = width/2
+        }
+    }
+    
+    func arrowColor(color:UIColor, ofWidth width:CGFloat) {
+        arrowColor = color;
+        
+        arrowLeftHalf.strokeColor = color.CGColor;
+        arrowRightHalf.strokeColor = color.CGColor;
+        
+        if width >= 0 {
+            arrowLeftHalf.lineWidth = width
+            arrowRightHalf.lineWidth = width
         }
     }
     
@@ -310,8 +306,8 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
             }
             self.addSubview(tableView)
         }
-        datArray = array
-        dataArrayCount = datArray.count
+        dataArray = array
+        dataArrayCount = dataArray.count
         
         tableView.separatorColor = arrowColor
         tableView.delegate = self
@@ -321,7 +317,7 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return datArray.count
+        return dataArray.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -359,7 +355,7 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
         
         cell?.separatorInset = UIEdgeInsetsZero
         cell?.tintColor = arrowColor
-        cell?.textLabel?.text = datArray[indexPath.row] as? String
+        cell?.textLabel?.text = dataArray[indexPath.row] as? String
         cell?.textLabel?.textColor = arrowColor
         cell?.textLabel?.textAlignment = NSTextAlignment.Center
         
@@ -372,7 +368,7 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
             let cell = tableView.cellForRowAtIndexPath(indexPath)
             cell?.accessoryType = UITableViewCellAccessoryType.Checkmark
         } else {
-            let string = datArray[indexPath.row] as? String
+            let string = dataArray[indexPath.row] as? String
             self.setTitle(string, forState: .Normal)
             animateButton()
         }

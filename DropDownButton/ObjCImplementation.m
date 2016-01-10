@@ -77,10 +77,8 @@
     // Creates dropdown button using obj-c files (Allowing 1 selection)
     _dropButton = [[DropDownButton alloc]initWithFrame:CGRectMake(self.frame.size.width/2-100, 150, 200, 40)];
     _dropButton.delegate = self;
-    [_dropButton setBorderColor:[UIColor orangeColor]];
-    [_dropButton setArrowColor:mainColor];
-    [_dropButton setBorderWidth:2.0];
-    [_dropButton setArrowWidth:2.0];
+    [_dropButton setBorderColor:[UIColor orangeColor] ofWidth:2.0];
+    [_dropButton setArrowColor:mainColor ofWidth:2.0];
     [_dropButton setTitle:@"Drop Button" forState:UIControlStateNormal];
     [_dropButton setTitleColor:mainColor forState:UIControlStateNormal];
     [_dropButton setBackgroundColor:[UIColor orangeColor]];

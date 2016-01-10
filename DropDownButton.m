@@ -32,6 +32,8 @@
 
 @property (nonatomic) UIColor *theBorderColor;
 @property (nonatomic) UIColor *theBackgroundColor;
+@property (nonatomic) float borderWidth;
+@property (nonatomic) float arrowWidth;
 @property (nonatomic) UIColor *theArrowColor;
 @property (nonatomic) UIView *arrowView;
 @property (nonatomic) CAShapeLayer *arrowLayer;
@@ -44,7 +46,6 @@
 @property (nonatomic) CAShapeLayer *arrowRightHalf;
 @property (nonatomic) NSArray *dataArray;
 @property (nonatomic) NSMutableArray *indexPathArray;
-@property (nonatomic) NSInteger dataArrayCount;
 @property (nonatomic) int numSelections;
 @property (nonatomic) BOOL isOpen;
 
@@ -223,7 +224,14 @@
 
 #pragma mark - Border and Arrow Methods
 
-- (void)setBorderWidth:(float)width {
+- (void)setBorderColor:(UIColor *)color ofWidth:(CGFloat)width {
+    self.theBorderColor = color;
+    
+    self.topBorder.strokeColor = color.CGColor;
+    self.bottomBorder.strokeColor = color.CGColor;
+    self.rightBorder.strokeColor = color.CGColor;
+    self.leftBorder.strokeColor = color.CGColor;
+    
     if (width >= 0) {
         self.topBorder.lineWidth = width;
         self.bottomBorder.lineWidth = width;
@@ -248,27 +256,16 @@
     self.topBorder.frame = topRect;
 }
 
-- (void)setArrowWidth:(float)arrowWidth {
-    if (arrowWidth >= 0) {
-        self.arrowLeftHalf.lineWidth = arrowWidth;
-        self.arrowRightHalf.lineWidth = arrowWidth;
-    }
-}
-
-- (void)setBorderColor:(UIColor *)color {
-    self.theBorderColor = color;
-    
-    self.topBorder.strokeColor = color.CGColor;
-    self.bottomBorder.strokeColor = color.CGColor;
-    self.rightBorder.strokeColor = color.CGColor;
-    self.leftBorder.strokeColor = color.CGColor;
-}
-
-- (void)setArrowColor:(UIColor *)color {
+- (void)setArrowColor:(UIColor *)color ofWidth:(CGFloat)width {
     self.theArrowColor = color;
     
     self.arrowLeftHalf.strokeColor = color.CGColor;
     self.arrowRightHalf.strokeColor = color.CGColor;
+    
+    if (width >= 0) {
+        self.arrowLeftHalf.lineWidth = width;
+        self.arrowRightHalf.lineWidth = width;
+    }
 }
 
 - (void)setBorderAndArrowColor:(UIColor *)color ofWidth:(float)width {
@@ -335,8 +332,6 @@
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    
-    self.dataArrayCount = [tableArray count];
     
 }
 

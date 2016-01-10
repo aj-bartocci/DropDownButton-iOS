@@ -120,10 +120,8 @@ class ViewController: UIViewController, DropDownButtonSwiftDelegate, UIGestureRe
         // Create drop down button with swift
         dropButton.center.x = swiftLabel.center.x
         dropButton.delegate = self
-        dropButton.borderColor(UIColor.orangeColor())
-        dropButton.borderWidth(2.0)
-        dropButton.arrowColor(mainColor)
-        dropButton.arrowWidth(2.0)
+        dropButton.borderColor(UIColor.orangeColor(), ofWidth: 2.0)
+        dropButton.arrowColor(mainColor, ofWidth: 2.0)
         dropButton.setTitle("Drop Button", forState: UIControlState.Normal)
         dropButton.setTitleColor(mainColor, forState: UIControlState.Normal)
         dropButton.backgroundColor = UIColor.orangeColor()
@@ -218,15 +216,15 @@ class ViewController: UIViewController, DropDownButtonSwiftDelegate, UIGestureRe
     // Delegate call returns index of selected object to check against array
     func dropDownButtonSwift(dropDownButton: DropDownButtonSwift, selectedButtonAtIndex index: NSInteger) {
         if dropDownButton.isEqual(dropButton) {
-            let selection = dropDownButton.datArray[index]
+            let selection = dropDownButton.dataArray[index]
             swiftLabelOne.text = "Selected: \(selection)"
         } else if dropDownButton.isEqual(checkButton) {
             if swiftLabelTwo.text == "Nothing Selected Yet" {
-                let selection = dropDownButton.datArray[index]
+                let selection = dropDownButton.dataArray[index]
                 swiftLabelTwo.text = "Selected: \(selection)"
             } else {
                 let selection = swiftLabelTwo.text
-                let newSelection = dropDownButton.datArray[index]
+                let newSelection = dropDownButton.dataArray[index]
                 swiftLabelTwo.text = "\(selection!) \(newSelection)"
             }
         } else {
@@ -251,7 +249,7 @@ class ViewController: UIViewController, DropDownButtonSwiftDelegate, UIGestureRe
         if dropDownButton.isEqual(checkButton) {
             
             let currentSelection = swiftLabelTwo.text!
-            let eraseSelection = " \(dropDownButton.datArray[index])"
+            let eraseSelection = " \(dropDownButton.dataArray[index])"
             var finalSelection = currentSelection.stringByReplacingOccurrencesOfString(eraseSelection, withString: "")
             
             if finalSelection == "Selected:" {

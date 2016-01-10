@@ -44,9 +44,6 @@
 @interface DropDownButton : UIButton <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
 
 @property (nonatomic) float amountOfDrops;
-@property (nonatomic) float borderWidth;
-@property (nonatomic) float arrowWidth;
-@property (nonatomic, readonly) NSInteger dataArrayCount;
 @property (nonatomic, retain) UITableView *tableView;
 @property (nonatomic) BOOL isCheckList;
 @property (nonatomic, readonly) BOOL isOpen;
@@ -55,8 +52,8 @@
 @property (nonatomic, assign) id  delegate;
 
 - (void)closeWhenTapOff;
-- (void)setBorderColor:(UIColor *)color;
-- (void)setArrowColor:(UIColor *)color;
+- (void)setBorderColor:(UIColor *)color ofWidth:(CGFloat)width;
+- (void)setArrowColor:(UIColor *)color ofWidth:(CGFloat)width;
 - (void)setBorderAndArrowColor:(UIColor *)color ofWidth:(float)width;
 - (void)setDataSource:(NSArray *)tableArray isCheckList:(BOOL)isCheckList;
 
