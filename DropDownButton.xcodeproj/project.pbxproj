@@ -39,8 +39,8 @@
 
 /* Begin PBXFileReference section */
 		211D086E1C41DC320065FAA4 /* License.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = License.rtf; sourceTree = "<group>"; };
-		214F72D61C40205000EAA4A7 /* DropDownButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropDownButton.h; path = DropDownButton/DropDownButton.h; sourceTree = "<group>"; };
-		214F72D71C40205000EAA4A7 /* DropDownButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropDownButton.m; path = DropDownButton/DropDownButton.m; sourceTree = "<group>"; };
+		214F72D61C40205000EAA4A7 /* DropDownButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropDownButton.h; path = ../DropDownButton.h; sourceTree = "<group>"; };
+		214F72D71C40205000EAA4A7 /* DropDownButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropDownButton.m; path = ../DropDownButton.m; sourceTree = "<group>"; };
 		214F72DF1C40434900EAA4A7 /* ObjCImplementation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCImplementation.h; sourceTree = "<group>"; };
 		214F72E01C40434900EAA4A7 /* ObjCImplementation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjCImplementation.m; sourceTree = "<group>"; };
 		214F72E21C4057BF00EAA4A7 /* DropDownButtonSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownButtonSwift.swift; sourceTree = "<group>"; };
@@ -88,8 +88,6 @@
 		2190B8B81C40189700706752 = {
 			isa = PBXGroup;
 			children = (
-				214F72D61C40205000EAA4A7 /* DropDownButton.h */,
-				214F72D71C40205000EAA4A7 /* DropDownButton.m */,
 				2190B8C31C40189700706752 /* DropDownButton */,
 				2190B8D81C40189800706752 /* DropDownButtonTests */,
 				2190B8E31C40189800706752 /* DropDownButtonUITests */,
@@ -114,6 +112,8 @@
 				2190B8C61C40189700706752 /* ViewController.swift */,
 				214F72DF1C40434900EAA4A7 /* ObjCImplementation.h */,
 				214F72E01C40434900EAA4A7 /* ObjCImplementation.m */,
+				214F72D61C40205000EAA4A7 /* DropDownButton.h */,
+				214F72D71C40205000EAA4A7 /* DropDownButton.m */,
 				214F72E21C4057BF00EAA4A7 /* DropDownButtonSwift.swift */,
 				2190B8C81C40189700706752 /* Main.storyboard */,
 				2190B8CB1C40189700706752 /* Assets.xcassets */,
