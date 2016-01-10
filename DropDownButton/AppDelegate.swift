@@ -3,7 +3,7 @@
 //  DropDownButton
 //
 //  Created by AJ Bartocci on 1/8/16.
-//  Copyright © 2016 AJ Bartocci. All rights reserved.
+//  Copyright © 2016 AJ Bartocci
 //
 
 import UIKit
