@@ -28,7 +28,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, MyAnimatedButtonSwiftDelegate, UIGestureRecognizerDelegate  {
+class ViewController: UIViewController, DropDownButtonSwiftDelegate, UIGestureRecognizerDelegate  {
 
     let containerView = UIView()
     let swiftView = UIView()
@@ -38,9 +38,9 @@ class ViewController: UIViewController, MyAnimatedButtonSwiftDelegate, UIGesture
     
     // Buttons
     let swiftLabelOne = UILabel(frame: CGRectMake(0,105,300,40));
-    let dropButton = MyAnimatedButtonSwift(frame: CGRectMake(0, 150, 200, 40))
+    let dropButton = DropDownButtonSwift(frame: CGRectMake(0, 150, 200, 40))
     let swiftLabelTwo =  UILabel(frame: CGRectMake(0,270,300,40));
-    let checkButton = MyAnimatedButtonSwift(frame: CGRectMake(0, 315, 200, 40))
+    let checkButton = DropDownButtonSwift(frame: CGRectMake(0, 315, 200, 40))
     
     // An array of strings for the button to use when dropping down
     //let dataArray = ["object 1","object 2","object 3","object 4","object 5","and so on..."]
@@ -82,7 +82,7 @@ class ViewController: UIViewController, MyAnimatedButtonSwiftDelegate, UIGesture
         setupButtons()
         
         // Create button to switch views
-        let switchButton = MyAnimatedButtonSwift(frame: CGRectMake(self.view.frame.size.width/2-125, 20, 250, 40))
+        let switchButton = DropDownButtonSwift(frame: CGRectMake(self.view.frame.size.width/2-125, 20, 250, 40))
         switchButton.delegate = self
         switchButton.borderAndArrowColor(UIColor.orangeColor(), ofWidth: 4.0)
         switchButton.setTitle("Objective-C", forState: UIControlState.Normal)
@@ -211,22 +211,22 @@ class ViewController: UIViewController, MyAnimatedButtonSwiftDelegate, UIGesture
     }
     
     // Delegate call to check when the button is animating
-    func myAnimatedButtonSwiftDidAnimate(myAnimatedButton: MyAnimatedButtonSwift) {
+    func dropDownButtonSwiftDidAnimate(dropDownButton: DropDownButtonSwift) {
         print("did animate")
     }
     
     // Delegate call returns index of selected object to check against array
-    func myAnimatedButtonSwift(myAnimatedButton: MyAnimatedButtonSwift, selectedButtonAtIndex index: NSInteger) {
-        if myAnimatedButton.isEqual(dropButton) {
-            let selection = myAnimatedButton.datArray[index]
+    func dropDownButtonSwift(dropDownButton: DropDownButtonSwift, selectedButtonAtIndex index: NSInteger) {
+        if dropDownButton.isEqual(dropButton) {
+            let selection = dropDownButton.datArray[index]
             swiftLabelOne.text = "Selected: \(selection)"
-        } else if myAnimatedButton.isEqual(checkButton) {
+        } else if dropDownButton.isEqual(checkButton) {
             if swiftLabelTwo.text == "Nothing Selected Yet" {
-                let selection = myAnimatedButton.datArray[index]
+                let selection = dropDownButton.datArray[index]
                 swiftLabelTwo.text = "Selected: \(selection)"
             } else {
                 let selection = swiftLabelTwo.text
-                let newSelection = myAnimatedButton.datArray[index]
+                let newSelection = dropDownButton.datArray[index]
                 swiftLabelTwo.text = "\(selection!) \(newSelection)"
             }
         } else {
@@ -247,11 +247,11 @@ class ViewController: UIViewController, MyAnimatedButtonSwiftDelegate, UIGesture
     }
     
     // Delegate call returns index of deselected object to check against array
-    func myAnimatedButtonSwift(myAnimatedButton: MyAnimatedButtonSwift, deselectedButtonAtIndex index: NSInteger) {
-        if myAnimatedButton.isEqual(checkButton) {
+    func dropDownButtonSwift(dropDownButton: DropDownButtonSwift, deselectedButtonAtIndex index: NSInteger) {
+        if dropDownButton.isEqual(checkButton) {
             
             let currentSelection = swiftLabelTwo.text!
-            let eraseSelection = " \(myAnimatedButton.datArray[index])"
+            let eraseSelection = " \(dropDownButton.datArray[index])"
             var finalSelection = currentSelection.stringByReplacingOccurrencesOfString(eraseSelection, withString: "")
             
             if finalSelection == "Selected:" {

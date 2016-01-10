@@ -30,10 +30,9 @@
 
 @interface ObjCImplementation()
 
-//@property (nonatomic, retain) NSArray *dataArray;
-@property (nonatomic, retain) MyAnimatedButton *dropButton;
+@property (nonatomic, retain) DropDownButton *dropButton;
 @property (nonatomic, retain) UILabel *dropLabel;
-@property (nonatomic, retain) MyAnimatedButton *checkButton;
+@property (nonatomic, retain) DropDownButton *checkButton;
 @property (nonatomic, retain) UILabel *checkLabel;
 
 @end
@@ -76,7 +75,7 @@
     [self addSubview:_dropLabel];
     
     // Creates dropdown button using obj-c files (Allowing 1 selection)
-    _dropButton = [[MyAnimatedButton alloc]initWithFrame:CGRectMake(self.frame.size.width/2-100, 150, 200, 40)];
+    _dropButton = [[DropDownButton alloc]initWithFrame:CGRectMake(self.frame.size.width/2-100, 150, 200, 40)];
     _dropButton.delegate = self;
     [_dropButton setBorderColor:[UIColor orangeColor]];
     [_dropButton setArrowColor:mainColor];
@@ -112,7 +111,7 @@
     [self insertSubview:_checkLabel belowSubview:_dropButton];
     
     // Creates dropdown button using obj-c files (Allowing multiple selections)
-    _checkButton = [[MyAnimatedButton alloc]initWithFrame:CGRectMake(_dropButton.frame.origin.x, 315, 200, 40)];
+    _checkButton = [[DropDownButton alloc]initWithFrame:CGRectMake(_dropButton.frame.origin.x, 315, 200, 40)];
     _checkButton.delegate = self;
     [_checkButton setBorderAndArrowColor:[UIColor orangeColor] ofWidth:2.0];
     [_checkButton setTitle:@"Checklist" forState:UIControlStateNormal];
@@ -126,7 +125,7 @@
 }
 
 // Delegate call returns index of selected object to check against array
-- (void)myAnimatedButton:(MyAnimatedButton *)button selectedButtonAtIndex:(NSInteger)index {
+- (void)dropDownButton:(DropDownButton *)button selectedButtonAtIndex:(NSInteger)index {
     if ([button isEqual:_dropButton]) {
         _dropLabel.text = button.dataArray[index];
     } else if ([button isEqual:_checkButton]) {
@@ -141,7 +140,7 @@
 }
 
 // Delegate call returns index of deselected object to check against array
-- (void)myAnimatedButton:(MyAnimatedButton *)button deselectedButtonAtIndex:(NSInteger)index    {
+- (void)dropDownButton:(DropDownButton *)button deselectedButtonAtIndex:(NSInteger)index    {
     if ([button isEqual:_checkButton]) {
         NSString *currentSelection = _checkLabel.text;
         NSString *eraseSelection = [NSString stringWithFormat:@" %@",button.dataArray[index]];

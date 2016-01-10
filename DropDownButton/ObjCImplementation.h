@@ -27,9 +27,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MyAnimatedButton.h"
+#import "DropDownButton.h"
 
-@interface ObjCImplementation : UIView <UIGestureRecognizerDelegate, MyAnimatedButtonDelegate>
+@interface ObjCImplementation : UIView <UIGestureRecognizerDelegate, DropDownButtonDelegate>
 
 - (void)createDropDownButtons;
 

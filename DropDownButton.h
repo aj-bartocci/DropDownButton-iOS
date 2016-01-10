@@ -1,5 +1,5 @@
 //
-//  MyAnimatedButton.h
+//  DropDownButton.h
 //  DropDownButton
 //
 //  Created by AJ Bartocci on 1/8/16.
@@ -28,20 +28,20 @@
 
 #import <UIKit/UIKit.h>
 
-@class MyAnimatedButton;
+@class DropDownButton;
 
-@protocol MyAnimatedButtonDelegate
+@protocol DropDownButtonDelegate
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch;
 
 @optional
-- (void)myAnimatedButtonDidAnimate:(MyAnimatedButton *)myAnimatedButton;
-- (void)myAnimatedButton:(MyAnimatedButton *)button selectedButtonAtIndex:(NSInteger)index;
-- (void)myAnimatedButton:(MyAnimatedButton *)button deselectedButtonAtIndex:(NSInteger)index;
+- (void)dropDownButtonDidAnimate:(DropDownButton *)dropDownButton;
+- (void)dropDownButton:(DropDownButton *)dropDownbutton selectedButtonAtIndex:(NSInteger)index;
+- (void)dropDownButton:(DropDownButton *)dropDownbutton deselectedButtonAtIndex:(NSInteger)index;
 
 @end
 
-@interface MyAnimatedButton : UIButton <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
+@interface DropDownButton : UIButton <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
 
 @property (nonatomic) float amountOfDrops;
 @property (nonatomic) float borderWidth;

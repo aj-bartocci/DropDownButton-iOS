@@ -1,5 +1,5 @@
 //
-//  MyAnimatedButtonSwift.swift
+//  DropDownButtonSwift.swift
 //  DropDownButton
 //
 //  Created by AJ Bartocci on 1/8/16.
@@ -28,24 +28,24 @@
 
 import UIKit
 
-@objc protocol MyAnimatedButtonSwiftDelegate {
+@objc protocol DropDownButtonSwiftDelegate {
     
     func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldReceiveTouch touch: UITouch) -> Bool
     
     optional
-    func myAnimatedButtonSwiftDidAnimate(myAnimatedButton: MyAnimatedButtonSwift)
-    func myAnimatedButtonSwift(myAnimatedButton:MyAnimatedButtonSwift, selectedButtonAtIndex index:NSInteger)
-    func myAnimatedButtonSwift(myAnimatedButton:MyAnimatedButtonSwift, deselectedButtonAtIndex index:NSInteger)
+    func dropDownButtonSwiftDidAnimate(dropDownButton: DropDownButtonSwift)
+    func dropDownButtonSwift(dropDownButton:DropDownButtonSwift, selectedButtonAtIndex index:NSInteger)
+    func dropDownButtonSwift(dropDownButton:DropDownButtonSwift, deselectedButtonAtIndex index:NSInteger)
     
 }
 
-class MyAnimatedButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource {
+class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource {
     
     // Public
     var amountOfDrops = CGFloat()
     var tableView = UITableView()
     var isChecklist = false
-    weak var delegate: MyAnimatedButtonSwiftDelegate?
+    weak var delegate: DropDownButtonSwiftDelegate?
     // Readonly to public
     private(set) internal var datArray = NSArray()
     private(set) internal var dataArrayCount = NSInteger()
@@ -179,7 +179,7 @@ class MyAnimatedButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewD
                     self.titleEdgeInsets = UIEdgeInsetsMake(topEdge, 0.0, 0.0, 0.0)
                     
                     // Tell delegate that the animation has ended
-                    self.delegate?.myAnimatedButtonSwiftDidAnimate!(self)
+                    self.delegate?.dropDownButtonSwiftDidAnimate!(self)
 
             })
             
@@ -210,7 +210,7 @@ class MyAnimatedButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewD
                     self.titleEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
                     
                     // Tell delegate that the animation has ended
-                    self.delegate?.myAnimatedButtonSwiftDidAnimate!(self)
+                    self.delegate?.dropDownButtonSwiftDidAnimate!(self)
             })
         }
         
@@ -376,7 +376,7 @@ class MyAnimatedButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewD
             self.setTitle(string, forState: .Normal)
             animateButton()
         }
-        delegate?.myAnimatedButtonSwift(self, selectedButtonAtIndex: indexPath.row)
+        delegate?.dropDownButtonSwift(self, selectedButtonAtIndex: indexPath.row)
     }
     
     func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
@@ -385,7 +385,7 @@ class MyAnimatedButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewD
             let cell = tableView.cellForRowAtIndexPath(indexPath)
             cell?.accessoryType = UITableViewCellAccessoryType.None
         }
-        delegate?.myAnimatedButtonSwift(self, deselectedButtonAtIndex: indexPath.row)
+        delegate?.dropDownButtonSwift(self, deselectedButtonAtIndex: indexPath.row)
     }
     
     // Gesture recgognizer for opening and closing

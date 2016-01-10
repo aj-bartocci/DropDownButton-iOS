@@ -1,5 +1,5 @@
 //
-//  MyAnimatedButton.m
+//  DropDownButton.m
 //  DropDownButton
 //
 //  Created by AJ Bartocci on 1/8/16.
@@ -26,9 +26,9 @@
 //  SOFTWARE.
 //
 
-#import "MyAnimatedButton.h"
+#import "DropDownButton.h"
 
-@interface MyAnimatedButton ()
+@interface DropDownButton ()
 
 @property (nonatomic) UIColor *theBorderColor;
 @property (nonatomic) UIColor *theBackgroundColor;
@@ -50,7 +50,7 @@
 
 @end
 
-@implementation MyAnimatedButton
+@implementation DropDownButton
 
 @synthesize delegate;
 
@@ -178,8 +178,8 @@
             [self setTitleEdgeInsets:UIEdgeInsetsMake(topEdge, 0.0, 0.0, 0.0)];
             
             //tell delegate animation ended if the method is being implemented
-            if ([delegate respondsToSelector:@selector(myAnimatedButtonDidAnimate:)]) {
-                [delegate myAnimatedButtonDidAnimate:self];
+            if ([delegate respondsToSelector:@selector(dropDownButtonDidAnimate:)]) {
+                [delegate dropDownButtonDidAnimate:self];
             }
         }];
         
@@ -214,8 +214,8 @@
             
             self.titleLabel.layer.opacity = 1.0;
             //tell delegate animation ended if the method is being implemented
-            if ([delegate respondsToSelector:@selector(myAnimatedButtonDidAnimate:)]) {
-                [delegate myAnimatedButtonDidAnimate:self];
+            if ([delegate respondsToSelector:@selector(dropDownButtonDidAnimate:)]) {
+                [delegate dropDownButtonDidAnimate:self];
             }
         }];
     }
@@ -417,8 +417,8 @@
         [self setTitle:string forState:UIControlStateNormal];
         [self animateButton];
     }
-    if ([delegate respondsToSelector:@selector(myAnimatedButton:selectedButtonAtIndex:)]) {
-        [delegate myAnimatedButton:self selectedButtonAtIndex:indexPath.row];
+    if ([delegate respondsToSelector:@selector(dropDownButton:selectedButtonAtIndex:)]) {
+        [delegate dropDownButton:self selectedButtonAtIndex:indexPath.row];
     }
 }
 
@@ -439,8 +439,8 @@
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         cell.accessoryType = UITableViewCellAccessoryNone;
         
-        if ([delegate respondsToSelector:@selector(myAnimatedButton:deselectedButtonAtIndex:)]) {
-            [delegate myAnimatedButton:self deselectedButtonAtIndex:indexPath.row];
+        if ([delegate respondsToSelector:@selector(dropDownButton:deselectedButtonAtIndex:)]) {
+            [delegate dropDownButton:self deselectedButtonAtIndex:indexPath.row];
         }
     }
 }
