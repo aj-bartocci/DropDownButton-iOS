@@ -39,8 +39,8 @@
 
 /* Begin PBXFileReference section */
 		211D086E1C41DC320065FAA4 /* License.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = License.rtf; sourceTree = "<group>"; };
-		214F72D61C40205000EAA4A7 /* DropDownButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DropDownButton.h; path = ../DropDownButton.h; sourceTree = "<group>"; };
-		214F72D71C40205000EAA4A7 /* DropDownButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DropDownButton.m; path = ../DropDownButton.m; sourceTree = "<group>"; };
+		214F72D61C40205000EAA4A7 /* DropDownButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropDownButton.h; sourceTree = "<group>"; };
+		214F72D71C40205000EAA4A7 /* DropDownButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropDownButton.m; sourceTree = "<group>"; };
 		214F72DF1C40434900EAA4A7 /* ObjCImplementation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCImplementation.h; sourceTree = "<group>"; };
 		214F72E01C40434900EAA4A7 /* ObjCImplementation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjCImplementation.m; sourceTree = "<group>"; };
 		214F72E21C4057BF00EAA4A7 /* DropDownButtonSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownButtonSwift.swift; sourceTree = "<group>"; };
