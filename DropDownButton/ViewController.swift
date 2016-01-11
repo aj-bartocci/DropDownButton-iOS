@@ -88,7 +88,8 @@ class ViewController: UIViewController, DropDownButtonSwiftDelegate, UIGestureRe
         switchButton.setTitle("Objective-C", forState: UIControlState.Normal)
         switchButton.setTitleColor(UIColor.orangeColor(), forState: UIControlState.Normal)
         switchButton.titleLabel?.font = UIFont(name: "HelveticaNeue-Bold", size: 22)
-        switchButton.amountOfDrops = -1
+        switchButton.amountOfDrops = 2
+        switchButton.animationDuration = 0.25
         let switchArray = ["Objective-C","Swift"]
         switchButton.setDataSource(switchArray, isCheckList: false)
         
@@ -152,65 +153,16 @@ class ViewController: UIViewController, DropDownButtonSwiftDelegate, UIGestureRe
         checkButton.setTitleColor(UIColor.orangeColor(), forState: UIControlState.Normal)
         checkButton.backgroundColor = UIColor.clearColor()
         checkButton.amountOfDrops = 4
+        checkButton.animationDuration = 0.25
         checkButton.setDataSource(dataArray, isCheckList: true)
         
         swiftView.insertSubview(checkButton, belowSubview: dropButton)
         
     }
     
-    func setupButtonWithObjC() {
-        /*
-        // Creates dropdown button using obj-c files (Allowing 1 selection)
-        dropButtonObjC.delegate = self
-        dropButtonObjC.setBorderColor(UIColor.orangeColor())
-        dropButtonObjC.setArrowColor(UIColor.whiteColor())
-        dropButtonObjC.arrowWidth = 2.0
-        dropButtonObjC.setTitle("1 Selection", forState: UIControlState.Normal)
-        dropButtonObjC.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
-        dropButtonObjC.backgroundColor = UIColor.orangeColor()
-        dropButtonObjC.amountOfDrops = 4
-        dropButtonObjC.setDataSource(dataArray, isCheckList: false)
-        
-        self.view.addSubview(dropButtonObjC)
-        
-        // UILabel for demonstrative purposes
-        objCLabelOne.text = "Nothing Selected Yet"
-        objCLabelOne.textAlignment = NSTextAlignment.Center
-        objCLabelOne.backgroundColor = UIColor.orangeColor()
-        objCLabelOne.textColor = UIColor.whiteColor()
-        
-        self.view.insertSubview(objCLabelOne, belowSubview: dropButtonObjC)
-        
-        // Creates dropdown button using obj-c files (Allowing multiple selections)
-        dropChecklistObjC.delegate = self
-        dropChecklistObjC.setBorderAndArrowColor(UIColor.orangeColor(), ofWidth: 2.0)
-        dropChecklistObjC.setTitle("Checklist", forState: UIControlState.Normal)
-        dropChecklistObjC.setTitleColor(UIColor.orangeColor(), forState: UIControlState.Normal)
-        dropChecklistObjC.backgroundColor = UIColor.whiteColor()
-        dropChecklistObjC.amountOfDrops = 4
-        dropChecklistObjC.setDataSource(dataArray, isCheckList: true)
-        
-        self.view.insertSubview(dropChecklistObjC, belowSubview: dropButtonObjC)
-        
-        // UILabel for demonstrative purposes
-        objCLabelTwo.text = "Nothing Selected Yet"
-        objCLabelTwo.textAlignment = NSTextAlignment.Center
-        objCLabelTwo.backgroundColor = UIColor.whiteColor()
-        objCLabelTwo.layer.borderColor = UIColor.orangeColor().CGColor
-        objCLabelTwo.layer.borderWidth = 2.0
-        objCLabelTwo.textColor = UIColor.orangeColor()
-        objCLabelTwo.numberOfLines = 1
-        objCLabelTwo.minimumScaleFactor = 0.5
-        objCLabelTwo.adjustsFontSizeToFitWidth = true
-        
-        self.view.insertSubview(objCLabelTwo, belowSubview: dropChecklistObjC)
-        */
-
-    }
-    
     // Delegate call to check when the button is animating
     func dropDownButtonSwiftDidAnimate(dropDownButton: DropDownButtonSwift) {
-        print("did animate")
+
     }
     
     // Delegate call returns index of selected object to check against array

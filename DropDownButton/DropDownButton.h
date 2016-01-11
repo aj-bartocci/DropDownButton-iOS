@@ -44,6 +44,7 @@
 @interface DropDownButton : UIButton <UITableViewDelegate, UITableViewDataSource, UIGestureRecognizerDelegate>
 
 @property (nonatomic) float amountOfDrops;
+@property (nonatomic) float animationDuration;
 @property (nonatomic, retain) UITableView *tableView;
 @property (nonatomic) BOOL isCheckList;
 @property (nonatomic, readonly) BOOL isOpen;

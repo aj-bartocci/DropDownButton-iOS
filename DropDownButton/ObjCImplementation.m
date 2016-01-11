@@ -116,6 +116,7 @@
     [_checkButton setTitleColor:[UIColor orangeColor] forState:UIControlStateNormal];
     [_checkButton setBackgroundColor:[UIColor clearColor]];
     _checkButton.amountOfDrops = 4;
+    _checkButton.animationDuration = 0.25;
     [_checkButton setDataSource:dataArray isCheckList:true];
     
     [self insertSubview:_checkButton belowSubview:_dropButton];

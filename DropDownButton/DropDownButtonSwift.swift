@@ -42,7 +42,6 @@ import UIKit
 class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource {
     
     // Public
-    var amountOfDrops = CGFloat()
     var tableView = UITableView()
     var isChecklist = false
     weak var delegate: DropDownButtonSwiftDelegate?
@@ -52,10 +51,10 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
     private(set) internal var isOpen = false
     
     // Hidden from public
-    private var borderWidth = Float()
-    private var arrowWidth = Float()
-    private var borderColor = UIColor()
-    private var arrowColor = UIColor()
+    private var borderWidth : Float = 1.0
+    private var arrowWidth : Float = 1.0
+    private var borderColor = UIColor.whiteColor()
+    private var arrowColor = UIColor.whiteColor()
     private var arrowView = UIView()
     private var arrowLayer = CAShapeLayer()
     private var leftBorder = CAShapeLayer()
@@ -66,6 +65,37 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
     private var arrowLeftHalf = CAShapeLayer()
     private var arrowRightHalf = CAShapeLayer()
     private var indexPathArray = NSMutableArray()
+    private var wrapperView = UIView()
+    
+    // Default to 0.25 and make sure it cannot be set to negative
+    private var _animationDuration : Double = 0.25
+    var animationDuration : Double {
+        get {
+            return _animationDuration
+        }
+        set (aNewValue) {
+            if aNewValue < 0.0 {
+                _animationDuration = 0.25
+            } else {
+                _animationDuration = aNewValue
+            }
+        }
+    }
+    
+    // Default to 2 drop minimum and no negative drops
+    private var _amountOfDrops : CGFloat = 2
+    var amountOfDrops : CGFloat {
+        get {
+            return _amountOfDrops
+        }
+        set (aNewValue) {
+            if aNewValue < 2 {
+                _amountOfDrops = 2
+            } else {
+                _amountOfDrops = aNewValue
+            }
+        }
+    }
     
     override init(frame:CGRect) {
         super.init(frame:frame)
@@ -85,18 +115,10 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
         tapGest.cancelsTouchesInView = false
         self.addGestureRecognizer(tapGest)
         
-        // Set default number of drops to the smallest possible
-        amountOfDrops = 2
-        
         // Create the default background
-        
         backgroundShape.path = UIBezierPath(rect: CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)).CGPath
         backgroundShape.fillColor = backgroundColor?.CGColor
         self.layer.addSublayer(backgroundShape)
-        
-        // Default colors to white
-        borderColor = UIColor.whiteColor()
-        arrowColor = UIColor.whiteColor()
         
         // Create the borders of the button
         leftBorder = drawLine(CGPointMake(0, 0), toPoint: CGPointMake(0, self.frame.size.height), withColor: UIColor.whiteColor(), ofWidth: 1.0)
@@ -124,7 +146,6 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
         arrowRightHalf = drawLine(CGPointMake(22, 30), toPoint: CGPointMake(35, 15), withColor: UIColor.whiteColor(), ofWidth: 1.0)
         arrowView.layer.addSublayer(arrowRightHalf)
         
-        isOpen = false
         self.enabled = true
         
     }
@@ -145,75 +166,162 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
     
     // Animate the button open and closed
     func animateButton() {
-        if amountOfDrops < 2 {
-            // Can't have it drop less than twice or there is no point in a drop down
-            amountOfDrops = 2
-        }
+        
         if !isOpen {
             arrowView.transform = CGAffineTransformMakeRotation(CGFloat(M_PI))
             self.enabled = false
             
             let origRect = self.frame
-            let scaleTrans = CATransform3DMakeScale(1.0, self.amountOfDrops, 1.0)
             
-            UIView.animateWithDuration(0.25, delay: 0.0, options: .CurveEaseOut, animations: {
+            // Border scale transforms
+            let scaleTrans = CATransform3DMakeScale(1.0, amountOfDrops, 1.0)
+            
+            let scaleAnimation = CABasicAnimation(keyPath: "transform")
+            scaleAnimation.fromValue = NSValue(CATransform3D: leftBorder.transform)
+            scaleAnimation.toValue = NSValue(CATransform3D: scaleTrans)
+            scaleAnimation.duration = animationDuration
+            scaleAnimation.removedOnCompletion = false;
+            
+            // Bottom border position transform
+            let dy = CGFloat((self.amountOfDrops-1)*self.frame.size.height)
+            let posTrans = CATransform3DMakeTranslation(0.0, dy, 0.0)
+            
+            let posAnimation = CABasicAnimation(keyPath: "transform")
+            posAnimation.fromValue = NSValue(CATransform3D: bottomBorder.transform)
+            posAnimation.toValue = NSValue(CATransform3D: posTrans)
+            posAnimation.duration = animationDuration
+            posAnimation.removedOnCompletion = false
+            
+            // Tableview bounds and positon transform through wrapper view
+            let oldBounds = wrapperView.bounds
+            var newBounds = oldBounds
+        
+            let newHeight = (amountOfDrops-1)*self.frame.size.height
+            newBounds.size.height = newHeight;
+            
+            let boundsAnimation = CABasicAnimation(keyPath: "bounds")
+            boundsAnimation.fromValue = NSValue(CGRect: oldBounds)
+            boundsAnimation.toValue = NSValue(CGRect: newBounds)
+            boundsAnimation.duration = animationDuration
+            boundsAnimation.removedOnCompletion = false
+            
+            let boundsTransform = CATransform3DMakeTranslation(0.0, newHeight/2, 0.0)
+            let boundsTransAnim = CABasicAnimation(keyPath: "transform")
+            boundsTransAnim.fromValue = NSValue(CATransform3D: wrapperView.layer.transform)
+            boundsTransAnim.toValue = NSValue(CATransform3D: boundsTransform)
+            boundsTransAnim.duration = animationDuration
+            boundsTransAnim.removedOnCompletion = false
+            
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            CATransaction.setCompletionBlock({ () -> Void in
                 
-                self.backgroundShape.transform = scaleTrans
-                self.leftBorder.transform = scaleTrans
-                self.rightBorder.transform = scaleTrans
+                self.isOpen = true
+                self.enabled = true
                 
-                let dy = CGFloat((self.amountOfDrops-1)*self.frame.size.height)
-                let posTrans = CATransform3DMakeTranslation(0.0, dy, 0.0)
-                self.bottomBorder.transform = posTrans
+                self.frame.size.height *= self.amountOfDrops
                 
-                self.tableView.frame.size.height = (self.amountOfDrops-1)*self.frame.size.height
+                let topEdge = -self.frame.size.height+origRect.size.height
+                self.titleEdgeInsets = UIEdgeInsetsMake(topEdge, 0.0, 0.0, 0.0)
                 
-                }, completion: { finished in
-                    
-                    self.isOpen = true
-                    self.enabled = true
-                    
-                    self.frame.size.height *= self.amountOfDrops
-                    
-                    let topEdge = -self.frame.size.height+origRect.size.height
-                    self.titleEdgeInsets = UIEdgeInsetsMake(topEdge, 0.0, 0.0, 0.0)
-                    
-                    // Tell delegate that the animation has ended
-                    self.delegate?.dropDownButtonSwiftDidAnimate!(self)
-
+                // Tell delegate that the animation has ended
+                self.delegate?.dropDownButtonSwiftDidAnimate!(self)
             })
+            
+            leftBorder.addAnimation(scaleAnimation, forKey: "transform")
+            rightBorder.addAnimation(scaleAnimation, forKey: "transform")
+            backgroundShape.addAnimation(scaleAnimation, forKey: "transform")
+            bottomBorder.addAnimation(posAnimation, forKey: "transform")
+            
+            wrapperView.layer.addAnimation(boundsAnimation, forKey: "bounds")
+            wrapperView.layer.addAnimation(boundsTransAnim, forKey: "transform")
+            
+            leftBorder.transform = scaleTrans
+            rightBorder.transform = scaleTrans
+            backgroundShape.transform = scaleTrans
+            bottomBorder.transform = posTrans
+            
+            wrapperView.bounds = newBounds
+            wrapperView.layer.transform = boundsTransform
+    
+            CATransaction.commit()
             
         } else {
             
             arrowView.transform = CGAffineTransformMakeRotation(0)
             self.enabled = false
+            
+            // Border scale transforms
             let scaleTrans = CATransform3DMakeScale(1.0, 1.0, 1.0)
             
-            UIView .animateWithDuration(0.25, delay: 0.0, options: .CurveEaseOut, animations: {
+            let scaleAnimation = CABasicAnimation(keyPath: "transform")
+            scaleAnimation.fromValue = NSValue(CATransform3D: leftBorder.transform)
+            scaleAnimation.toValue = NSValue(CATransform3D: scaleTrans)
+            scaleAnimation.duration = animationDuration
+            scaleAnimation.removedOnCompletion = false;
+            
+            // Bottom border position transform
+            let posTrans = CATransform3DMakeTranslation(0.0, 0.0, 0.0)
+            
+            let posAnimation = CABasicAnimation(keyPath: "transform")
+            posAnimation.fromValue = NSValue(CATransform3D: bottomBorder.transform)
+            posAnimation.toValue = NSValue(CATransform3D: posTrans)
+            posAnimation.duration = animationDuration
+            posAnimation.removedOnCompletion = false
+            
+            // Tableview bounds and positon transform through wrapper view
+            let oldBounds = wrapperView.bounds
+            var newBounds = oldBounds
+            
+            newBounds.size.height = CGFloat(0.0)
+            
+            let boundsAnimation = CABasicAnimation(keyPath: "bounds")
+            boundsAnimation.fromValue = NSValue(CGRect: oldBounds)
+            boundsAnimation.toValue = NSValue(CGRect: newBounds)
+            boundsAnimation.duration = animationDuration
+            boundsAnimation.removedOnCompletion = false
+            
+            
+            let boundsTransform = CATransform3DMakeTranslation(0.0, 0.0, 0.0)
+            let boundsTransAnim = CABasicAnimation(keyPath: "transform")
+            boundsTransAnim.fromValue = NSValue(CATransform3D: wrapperView.layer.transform)
+            boundsTransAnim.toValue = NSValue(CATransform3D: boundsTransform)
+            boundsTransAnim.duration = animationDuration
+            boundsTransAnim.removedOnCompletion = false
+            
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            CATransaction.setCompletionBlock({ () -> Void in
+                self.isOpen = false
+                self.enabled = true
                 
-                self.tableView.frame.size.height = 0.0
+                self.frame.size.height /= self.amountOfDrops
                 
-                self.leftBorder.transform = scaleTrans
-                self.rightBorder.transform = scaleTrans
-                self.backgroundShape.transform = scaleTrans
+                self.titleEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
                 
-                let posTrans = CATransform3DMakeTranslation(0.0, 0.0, 0.0)
-                self.bottomBorder.transform = posTrans
-                
-                }, completion: { finished in
-                    
-                    self.isOpen = false
-                    self.enabled = true
-                    
-                    self.frame.size.height /= self.amountOfDrops
-                    
-                    self.titleEdgeInsets = UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)
-                    
-                    // Tell delegate that the animation has ended
-                    self.delegate?.dropDownButtonSwiftDidAnimate!(self)
+                // Tell delegate that the animation has ended
+                self.delegate?.dropDownButtonSwiftDidAnimate!(self)
             })
-        }
+            
+            leftBorder.addAnimation(scaleAnimation, forKey: "transform")
+            rightBorder.addAnimation(scaleAnimation, forKey: "transform")
+            backgroundShape.addAnimation(scaleAnimation, forKey: "transform")
+            bottomBorder.addAnimation(posAnimation, forKey: "transform")
+            
+            wrapperView.layer.addAnimation(boundsAnimation, forKey: "bounds")
+            wrapperView.layer.addAnimation(boundsTransAnim, forKey: "transform")
+            
+            leftBorder.transform = scaleTrans
+            rightBorder.transform = scaleTrans
+            backgroundShape.transform = scaleTrans
+            bottomBorder.transform = posTrans
+            
+            wrapperView.bounds = newBounds
+            wrapperView.layer.transform = boundsTransform
+            
+            CATransaction.commit()
         
+        }
     }
     
     // Override UIButton's background color property
@@ -296,7 +404,8 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
     func setDataSource(array: NSArray, isCheckList checkList:Bool) {
         // Check if tableview has been added to the view yet
         if !tableView.isDescendantOfView(self) {
-            tableView.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, 0)
+            
+            tableView = UITableView(frame: CGRectMake(0.0, 0.0, self.frame.size.width, (amountOfDrops-1)*self.frame.size.height), style: UITableViewStyle.Plain)
             tableView.backgroundColor = UIColor.clearColor()
             tableView.separatorColor = UIColor.whiteColor()
             
@@ -304,7 +413,10 @@ class DropDownButtonSwift: UIButton, UIGestureRecognizerDelegate, UITableViewDel
                 isChecklist = true
                 tableView.allowsMultipleSelection = true
             }
-            self.addSubview(tableView)
+            wrapperView = UIView(frame: CGRectMake(0.0, self.frame.size.height, self.frame.size.width, 0.0))
+            self.addSubview(wrapperView)
+            wrapperView.addSubview(tableView)
+            wrapperView.clipsToBounds = true
         }
         dataArray = array
         dataArrayCount = dataArray.count

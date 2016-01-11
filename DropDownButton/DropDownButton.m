@@ -48,6 +48,7 @@
 @property (nonatomic) NSMutableArray *indexPathArray;
 @property (nonatomic) int numSelections;
 @property (nonatomic) BOOL isOpen;
+@property (nonatomic) UIView *wrapView;
 
 @end
 
@@ -121,6 +122,8 @@
     
     self.numSelections = 0;
     
+    self.animationDuration = 0.25;
+    
     return self;
 }
 
@@ -141,84 +144,174 @@
 
 - (void)animateButton {
     
-    if (self.amountOfDrops < 2) {
-        // Can't have it drop less than twice or there is no point in a drop down
-        self.amountOfDrops = 2;
-    }
-    
     if (!self.isOpen) {
         self.arrowView.transform = CGAffineTransformMakeRotation(M_PI);
         self.enabled = false;
         
         CGRect origRect = self.frame;
         
-        [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        // Border scale transforms
+        CATransform3D scaleTrans = CATransform3DMakeScale(1.0, self.amountOfDrops, 1.0);
+        
+        CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath: @"transform"];
+        scaleAnimation.fromValue = [NSValue valueWithCATransform3D:self.leftBorder.transform];
+        scaleAnimation.toValue = [NSValue valueWithCATransform3D:scaleTrans];
+        scaleAnimation.duration = self.animationDuration;
+        scaleAnimation.removedOnCompletion = false;
+        
+        // Bottom border position transform
+        float dy = (self.amountOfDrops-1)*self.frame.size.height;
+        CATransform3D posTrans = CATransform3DMakeTranslation(0.0, dy, 0.0);
+        
+        CABasicAnimation *posAnimation = [CABasicAnimation animationWithKeyPath: @"transform"];
+        posAnimation.fromValue = [NSValue valueWithCATransform3D:self.bottomBorder.transform];
+        posAnimation.toValue = [NSValue valueWithCATransform3D:posTrans];
+        posAnimation.duration = self.animationDuration;
+        posAnimation.removedOnCompletion = false;
+        
+        
+        // Tableview bounds and positon transform through wrapper view
+        CGRect oldBounds = self.wrapView.bounds;
+        CGRect newBounds = oldBounds;
+        
+        float newHeight = (self.amountOfDrops-1)*self.frame.size.height;
+        newBounds.size.height = newHeight;
+        
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"bounds"];
+        animation.fromValue = [NSValue valueWithCGRect:oldBounds];
+        animation.toValue = [NSValue valueWithCGRect:newBounds];
+        animation.duration = self.animationDuration;
+        animation.removedOnCompletion = false;
+        
+        CATransform3D posTransform = CATransform3DMakeTranslation(0.0, newHeight/2, 0.0);
+        CABasicAnimation *posAnim = [CABasicAnimation animationWithKeyPath:@"transform"];
+        posAnim.fromValue = [NSValue valueWithCATransform3D:self.wrapView.layer.transform];
+        posAnim.toValue = [NSValue valueWithCATransform3D:posTransform];
+        posAnim.duration = self.animationDuration;
+        posAnim.removedOnCompletion = false;
+        
+        [CATransaction begin]; {
+            [CATransaction setDisableActions: YES];
             
-            CATransform3D scaleTrans = CATransform3DMakeScale(1.0, self.amountOfDrops, 1.0);
+            [CATransaction setCompletionBlock:^{
+                
+                self.isOpen = true;
+                self.enabled = true;
+                
+                CGRect butRect = self.frame;
+                butRect.size.height = self.frame.size.height*self.amountOfDrops;
+                self.frame = butRect;
+                
+                float topEdge = -self.frame.size.height+origRect.size.height;
+                [self setTitleEdgeInsets:UIEdgeInsetsMake(topEdge, 0.0, 0.0, 0.0)];
+                
+                //tell delegate animation ended if the method is being implemented
+                if ([delegate respondsToSelector:@selector(dropDownButtonDidAnimate:)]) {
+                    [delegate dropDownButtonDidAnimate:self];
+                }
+                
+            }];
+            
+            [self.leftBorder addAnimation:scaleAnimation forKey:@"transform"];
+            [self.rightBorder addAnimation:scaleAnimation forKey:@"transform"];
+            [self.backgroundShape addAnimation:scaleAnimation forKey:@"transform"];
+            [self.bottomBorder addAnimation:posAnimation forKey:@"transform"];
+
+            [self.wrapView.layer addAnimation:animation forKey:@"bounds"];
+            [self.wrapView.layer addAnimation:posAnim forKey:@"transform"];
+            
             self.leftBorder.transform = scaleTrans;
             self.rightBorder.transform = scaleTrans;
             self.backgroundShape.transform = scaleTrans;
-            
-            float dy = (self.amountOfDrops-1)*self.frame.size.height;
-            CATransform3D posTrans = CATransform3DMakeTranslation(0.0, dy, 0.0);
             self.bottomBorder.transform = posTrans;
+
+            self.wrapView.bounds = newBounds;
+            self.wrapView.layer.transform = posTransform;
             
-            CGRect tableRect = self.tableView.frame;
-            tableRect.size.height = (self.amountOfDrops-1)*self.frame.size.height;
-            self.tableView.frame = tableRect;
-            
-        } completion:^(BOOL finished){
-            self.isOpen = true;
-            self.enabled = true;
-            
-            CGRect butRect = self.frame;
-            butRect.size.height = self.frame.size.height*self.amountOfDrops;
-            self.frame = butRect;
-            
-            float topEdge = -self.frame.size.height+origRect.size.height;
-            [self setTitleEdgeInsets:UIEdgeInsetsMake(topEdge, 0.0, 0.0, 0.0)];
-            
-            //tell delegate animation ended if the method is being implemented
-            if ([delegate respondsToSelector:@selector(dropDownButtonDidAnimate:)]) {
-                [delegate dropDownButtonDidAnimate:self];
-            }
-        }];
+        } [CATransaction commit];
         
     }
     else {
         self.arrowView.transform = CGAffineTransformMakeRotation(0);
         self.enabled = false;
         
-        [UIView animateWithDuration:0.25 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+        // Border scale transforms
+        CATransform3D scaleTrans = CATransform3DMakeScale(1.0, 1.0, 1.0);
+        
+        CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath: @"transform"];
+        scaleAnimation.fromValue = [NSValue valueWithCATransform3D:self.leftBorder.transform];
+        scaleAnimation.toValue = [NSValue valueWithCATransform3D:scaleTrans];
+        scaleAnimation.duration = self.animationDuration;
+        scaleAnimation.removedOnCompletion = false;
+        
+        // Bottom border position transform
+        CATransform3D posTrans = CATransform3DMakeTranslation(0.0, 0.0, 0.0);
+        
+        CABasicAnimation *posAnimation = [CABasicAnimation animationWithKeyPath: @"transform"];
+        posAnimation.fromValue = [NSValue valueWithCATransform3D:self.bottomBorder.transform];
+        posAnimation.toValue = [NSValue valueWithCATransform3D:posTrans];
+        posAnimation.duration = self.animationDuration;
+        posAnimation.removedOnCompletion = false;
+        
+        // Tableview bounds and positon transform through wrapper view
+        CGRect oldBounds = self.wrapView.bounds;
+        CGRect newBounds = oldBounds;
+        
+        float newHeight = 0.0;
+        newBounds.size.height = newHeight;
+        
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"bounds"];
+        animation.fromValue = [NSValue valueWithCGRect:oldBounds];
+        animation.toValue = [NSValue valueWithCGRect:newBounds];
+        animation.duration = self.animationDuration;
+        animation.removedOnCompletion = false;
+        
+        CATransform3D posTransform = CATransform3DMakeTranslation(0.0, 0.0, 0.0);
+        CABasicAnimation *posAnim = [CABasicAnimation animationWithKeyPath:@"transform"];
+        posAnim.fromValue = [NSValue valueWithCATransform3D:self.wrapView.layer.transform];
+        posAnim.toValue = [NSValue valueWithCATransform3D:posTransform];
+        posAnim.duration = self.animationDuration;
+        posAnim.removedOnCompletion = false;
+        
+        [CATransaction begin]; {
+            [CATransaction setDisableActions: YES];
             
-            CGRect tableRect = self.tableView.frame;
-            tableRect.size.height = 0.0;
-            self.tableView.frame = tableRect;
+            [CATransaction setCompletionBlock:^{
+                
+                self.isOpen = false;
+                self.enabled = true;
+                
+                CGRect butRect = self.frame;
+                butRect.size.height = self.frame.size.height/self.amountOfDrops;
+                self.frame = butRect;
+                
+                [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)];
+                
+                self.titleLabel.layer.opacity = 1.0;
+                //tell delegate animation ended if the method is being implemented
+                if ([delegate respondsToSelector:@selector(dropDownButtonDidAnimate:)]) {
+                    [delegate dropDownButtonDidAnimate:self];
+                }
+                
+            }];
             
-            CATransform3D scaleTrans = CATransform3DMakeScale(1.0, 1.0, 1.0);
+            [self.leftBorder addAnimation:scaleAnimation forKey:@"transform"];
+            [self.rightBorder addAnimation:scaleAnimation forKey:@"transform"];
+            [self.backgroundShape addAnimation:scaleAnimation forKey:@"transform"];
+            [self.bottomBorder addAnimation:posAnimation forKey:@"transform"];
+            
+            [self.wrapView.layer addAnimation:animation forKey:@"bounds"];
+            [self.wrapView.layer addAnimation:posAnim forKey:@"transform"];
+            
             self.leftBorder.transform = scaleTrans;
             self.rightBorder.transform = scaleTrans;
             self.backgroundShape.transform = scaleTrans;
-            
-            CATransform3D posTrans = CATransform3DMakeTranslation(0.0, 0.0, 0.0);
             self.bottomBorder.transform = posTrans;
             
-        } completion:^(BOOL finished){
-            self.isOpen = false;
-            self.enabled = true;
+            self.wrapView.bounds = newBounds;
+            self.wrapView.layer.transform = posTransform;
             
-            CGRect butRect = self.frame;
-            butRect.size.height = self.frame.size.height/self.amountOfDrops;
-            self.frame = butRect;
-            
-            [self setTitleEdgeInsets:UIEdgeInsetsMake(0.0, 0.0, 0.0, 0.0)];
-            
-            self.titleLabel.layer.opacity = 1.0;
-            //tell delegate animation ended if the method is being implemented
-            if ([delegate respondsToSelector:@selector(dropDownButtonDidAnimate:)]) {
-                [delegate dropDownButtonDidAnimate:self];
-            }
-        }];
+        } [CATransaction commit];
     }
 }
 
@@ -312,19 +405,43 @@
     self.backgroundShape.fillColor = backgroundColor.CGColor;
 }
 
+// Make sure than duration is not a negative number
+- (void)setAnimationDuration:(float)animationDuration {
+    if (animationDuration < 0.0) {
+        self->_animationDuration = 0.25;
+    } else {
+        self->_animationDuration = animationDuration;
+    }
+}
+
+// Make sure the amount of drops is at least 2
+- (void)setAmountOfDrops:(float)amountOfDrops {
+    if (amountOfDrops < 2) {
+        self->_amountOfDrops = 2;
+    } else {
+        self->_amountOfDrops = amountOfDrops;
+    }
+}
+
 #pragma mark - TableView Methods
 
 - (void)setDataSource:(NSArray *)tableArray isCheckList:(BOOL)isCheckList {
     
     if (self.tableView == nil) {
-        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, self.frame.size.height, self.frame.size.width, 0.0) style:UITableViewStylePlain];
+        self.tableView = [[UITableView alloc]initWithFrame:CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height*(self.amountOfDrops-1)) style:UITableViewStylePlain];
         self.tableView.backgroundColor = [UIColor clearColor];
         self.tableView.separatorColor = [UIColor whiteColor];
         if (isCheckList) {
             self.isCheckList = true;
             self.tableView.allowsMultipleSelection = true;
         }
-        [self addSubview:self.tableView];
+        self.wrapView = [[UIView alloc]initWithFrame:CGRectMake(0.0, self.frame.size.height, self.frame.size.width, 0.0)];
+        [self addSubview:self.wrapView];
+        [self.wrapView addSubview:self.tableView];
+        
+        self.wrapView.clipsToBounds = true;
+        
+        //[self addSubview:self.tableView];
     }
     
     self.dataArray = tableArray;
