@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		211D086F1C41DC320065FAA4 /* License.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 211D086E1C41DC320065FAA4 /* License.rtf */; };
 		211D08721C42E52B0065FAA4 /* DropDownButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 211D08711C42E52B0065FAA4 /* DropDownButton.m */; };
 		214F72E11C40434900EAA4A7 /* ObjCImplementation.m in Sources */ = {isa = PBXBuildFile; fileRef = 214F72E01C40434900EAA4A7 /* ObjCImplementation.m */; };
 		214F72E31C4057BF00EAA4A7 /* DropDownButtonSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214F72E21C4057BF00EAA4A7 /* DropDownButtonSwift.swift */; };
@@ -38,7 +37,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		211D086E1C41DC320065FAA4 /* License.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = License.rtf; sourceTree = "<group>"; };
 		211D08701C42E52B0065FAA4 /* DropDownButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropDownButton.h; sourceTree = "<group>"; };
 		211D08711C42E52B0065FAA4 /* DropDownButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropDownButton.m; sourceTree = "<group>"; };
 		214F72DF1C40434900EAA4A7 /* ObjCImplementation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCImplementation.h; sourceTree = "<group>"; };
@@ -118,7 +116,6 @@
 				2190B8C81C40189700706752 /* Main.storyboard */,
 				2190B8CB1C40189700706752 /* Assets.xcassets */,
 				2190B8CD1C40189700706752 /* LaunchScreen.storyboard */,
-				211D086E1C41DC320065FAA4 /* License.rtf */,
 				2190B8D01C40189700706752 /* Info.plist */,
 				2190B8F21C40191B00706752 /* DropDownButton-Bridging-Header.h */,
 			);
@@ -248,7 +245,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				211D086F1C41DC320065FAA4 /* License.rtf in Resources */,
 				2190B8CF1C40189700706752 /* LaunchScreen.storyboard in Resources */,
 				2190B8CC1C40189700706752 /* Assets.xcassets in Resources */,
 				2190B8CA1C40189700706752 /* Main.storyboard in Resources */,
