@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		211D08721C42E52B0065FAA4 /* DropDownButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 211D08711C42E52B0065FAA4 /* DropDownButton.m */; };
+		2144F9EE1C6002DC0018C838 /* License.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2144F9ED1C6002DC0018C838 /* License.rtf */; };
 		214F72E11C40434900EAA4A7 /* ObjCImplementation.m in Sources */ = {isa = PBXBuildFile; fileRef = 214F72E01C40434900EAA4A7 /* ObjCImplementation.m */; };
 		214F72E31C4057BF00EAA4A7 /* DropDownButtonSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214F72E21C4057BF00EAA4A7 /* DropDownButtonSwift.swift */; };
 		2190B8C51C40189700706752 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2190B8C41C40189700706752 /* AppDelegate.swift */; };
@@ -39,6 +40,7 @@
 /* Begin PBXFileReference section */
 		211D08701C42E52B0065FAA4 /* DropDownButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropDownButton.h; sourceTree = "<group>"; };
 		211D08711C42E52B0065FAA4 /* DropDownButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropDownButton.m; sourceTree = "<group>"; };
+		2144F9ED1C6002DC0018C838 /* License.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; name = License.rtf; path = ../License.rtf; sourceTree = "<group>"; };
 		214F72DF1C40434900EAA4A7 /* ObjCImplementation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjCImplementation.h; sourceTree = "<group>"; };
 		214F72E01C40434900EAA4A7 /* ObjCImplementation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObjCImplementation.m; sourceTree = "<group>"; };
 		214F72E21C4057BF00EAA4A7 /* DropDownButtonSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropDownButtonSwift.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 		2190B8C31C40189700706752 /* DropDownButton */ = {
 			isa = PBXGroup;
 			children = (
+				2144F9ED1C6002DC0018C838 /* License.rtf */,
 				2190B8C41C40189700706752 /* AppDelegate.swift */,
 				2190B8C61C40189700706752 /* ViewController.swift */,
 				214F72DF1C40434900EAA4A7 /* ObjCImplementation.h */,
@@ -245,6 +248,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2144F9EE1C6002DC0018C838 /* License.rtf in Resources */,
 				2190B8CF1C40189700706752 /* LaunchScreen.storyboard in Resources */,
 				2190B8CC1C40189700706752 /* Assets.xcassets in Resources */,
 				2190B8CA1C40189700706752 /* Main.storyboard in Resources */,
